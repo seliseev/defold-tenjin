@@ -1,0 +1,32 @@
+-- Example showing how to integrate the Tenjin extension.
+-- Replace the placeholder with your SDK key from https://tenjin.com
+
+local TENJIN_SDK_KEY = "VC6OND6YYCKGTB9FTLJCFPICCWBWZ6XB"
+
+function init(self)
+	tenjin.init(TENJIN_SDK_KEY)
+	tenjin.set_app_store(tenjin.APP_STORE_GOOGLEPLAY)
+	tenjin.connect()
+
+	tenjin.send_event("game_started")
+	tenjin.send_event_with_value("coins_earned", 100)
+
+	local installation_id = tenjin.get_analytics_installation_id()
+	print("tenjin installation id:", installation_id)
+end
+
+function final(self)
+	-- Nothing to clean up; the Tenjin SDK is process-scoped.
+end
+
+function update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+end
+
+function on_reload(self)
+end

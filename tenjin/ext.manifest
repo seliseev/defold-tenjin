@@ -1,0 +1,6 @@
+name: "TenjinExt"
+
+platforms:
+    android:
+        context:
+            jetifier: "true"
