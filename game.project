@@ -10,7 +10,13 @@ height = 640
 
 [project]
 title = Tenjin
+dependencies#0 = https://github.com/defold/extension-adinfo/archive/refs/tags/3.0.2.zip
 
 [library]
 include_dirs = tenjin
+
+[android]
+minimum_sdk_version = 23
+debuggable = 1
+package = com.fun.worldcode
 

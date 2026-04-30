@@ -74,16 +74,18 @@ The extension compiles as part of the Defold cloud build, so the first Android b
 
 On Android, the following Maven artifacts are added to your bundled APK:
 
-| Artifact | Purpose |
-| --- | --- |
-| `com.tenjin:android-sdk` | Tenjin SDK itself (install / event tracking). |
-| `com.google.android.gms:play-services-ads-identifier` | Android Advertising ID (AAID). |
-| `com.google.android.gms:play-services-appset` | App Set ID. |
-| `com.android.installreferrer:installreferrer` | Google Play Install Referrer. |
+
+| Artifact                                              | Purpose                                       |
+| ----------------------------------------------------- | --------------------------------------------- |
+| `com.tenjin:android-sdk`                              | Tenjin SDK itself (install / event tracking). |
+| `com.google.android.gms:play-services-ads-identifier` | Android Advertising ID (AAID).                |
+| `com.google.android.gms:play-services-appset`         | App Set ID.                                   |
+| `com.android.installreferrer:installreferrer`         | Google Play Install Referrer.                 |
+
 
 ProGuard / R8 rules for Tenjin, Google Play Services, installreferrer,
 Gson / TypeToken and OAID providers ship inside the extension
-([`tenjin/manifests/android/tenjin.pro`](tenjin/manifests/android/tenjin.pro)).
+(`[tenjin/manifests/android/tenjin.pro](tenjin/manifests/android/tenjin.pro)`).
 
 ---
 
@@ -105,9 +107,9 @@ the following additional entries automatically:
 ```
 
 - `AD_ID` is required by Google Play for apps that read the AAID on
-  API 33+.
+API 33+.
 - The two `<queries>` entries allow Tenjin to collect the Meta (Facebook /
-  Instagram) install referrer.
+Instagram) install referrer.
 
 ### App store hint
 
@@ -136,17 +138,14 @@ Do **not** commit your SDK key to source control for shipping builds.
 Common patterns:
 
 - Read it from a build-time config entry:
-
   ```lua
   local sdk_key = sys.get_config("tenjin.sdk_key", "")
   tenjin.init(sdk_key)
   ```
-
   then add `tenjin.sdk_key = ...` under a custom `[tenjin]` section in
   your own `game.project` (not checked in).
-
 - Inject it at build time via `bob --settings` or a custom
-  `game.project` template on your CI.
+`game.project` template on your CI.
 
 ---
 
@@ -191,9 +190,11 @@ Every function forwards to the corresponding
 Create the `TenjinSDK` singleton with your app's SDK key. Must be called
 before any other `tenjin.*` function.
 
-| Param | Type | Notes |
-| --- | --- | --- |
+
+| Param     | Type     | Notes                                               |
+| --------- | -------- | --------------------------------------------------- |
 | `sdk_key` | `string` | The key shown in the Tenjin dashboard for your app. |
+
 
 ```lua
 tenjin.init("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
@@ -204,9 +205,11 @@ tenjin.init("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
 Tell Tenjin which app store the build targets. Call *before*
 `tenjin.connect()`.
 
-| Param | Type | Notes |
-| --- | --- | --- |
-| `store` | `string` | One of the `tenjin.APP_STORE_*` constants. |
+
+| Param   | Type     | Notes                                      |
+| ------- | -------- | ------------------------------------------ |
+| `store` | `string` | One of the `tenjin.APP_STORE_`* constants. |
+
 
 ```lua
 tenjin.set_app_store(tenjin.APP_STORE_GOOGLEPLAY)
@@ -228,9 +231,11 @@ tenjin.connect()
 Enable or disable the automatic `connect()` on every
 `EVENT_ID_ACTIVATEAPP`. Default: `true`.
 
-| Param | Type | Notes |
-| --- | --- | --- |
+
+| Param     | Type      | Notes                             |
+| --------- | --------- | --------------------------------- |
 | `enabled` | `boolean` | `false` to turn auto-connect off. |
+
 
 ```lua
 tenjin.set_auto_connect(false)
@@ -240,9 +245,7 @@ tenjin.set_auto_connect(false)
 
 #### `tenjin.send_event(name)`
 
-Record a named event. Use letters, digits and underscores. Empty or
-repeated names are not filtered by the extension — mirror whatever the
-Tenjin dashboard accepts.
+Record a named event. Use letters, digits and underscores. Empty or repeated names are not filtered by the extension — mirror whatever the Tenjin dashboard accepts.
 
 ```lua
 tenjin.send_event("level_1_completed")
@@ -250,14 +253,14 @@ tenjin.send_event("level_1_completed")
 
 #### `tenjin.send_event_with_value(name, value)`
 
-Record a named event together with an integer value. Tenjin sums and
-averages these values in the dashboard — useful for currency drains,
-level counts, etc.
+Record a named event together with an integer value. Tenjin sums and averages these values in the dashboard — useful for urrency drains, level counts, etc.
 
-| Param | Type | Notes |
-| --- | --- | --- |
-| `name`  | `string` | Event name. |
+
+| Param   | Type      | Notes                   |
+| ------- | --------- | ----------------------- |
+| `name`  | `string`  | Event name.             |
 | `value` | `integer` | Integer (32-bit) value. |
+
 
 ```lua
 tenjin.send_event_with_value("coins_spent", 250)
@@ -265,22 +268,22 @@ tenjin.send_event_with_value("coins_spent", 250)
 
 ### In-app purchases
 
-Tenjin validates your IAP receipts on its servers. Before you send
-events, paste your Base64-encoded RSA public key (Google Play) or the
-Amazon Shared Key into your app settings in the Tenjin dashboard.
+Tenjin validates your IAP receipts on its servers. Before you send events, paste your Base64-encoded RSA public key (Google Play) or the Amazon Shared Key into your app settings in the Tenjin dashboard.
 
 #### `tenjin.transaction(product_id, currency_code, quantity, unit_price, purchase_data, data_signature)`
 
 Send a Google Play purchase for validation.
 
-| Param | Type | Notes |
-| --- | --- | --- |
-| `product_id`     | `string` | SKU / product identifier. |
-| `currency_code`  | `string` | ISO-4217 code (e.g. `"USD"`). |
-| `quantity`       | `integer` | Items bought. |
-| `unit_price`     | `number` | Price per unit in the given currency. |
-| `purchase_data`  | `string` | `Purchase.getOriginalJson()` from the Billing Library. |
-| `data_signature` | `string` | `Purchase.getSignature()` from the Billing Library. |
+
+| Param            | Type      | Notes                                                  |
+| ---------------- | --------- | ------------------------------------------------------ |
+| `product_id`     | `string`  | SKU / product identifier.                              |
+| `currency_code`  | `string`  | ISO-4217 code (e.g. `"USD"`).                          |
+| `quantity`       | `integer` | Items bought.                                          |
+| `unit_price`     | `number`  | Price per unit in the given currency.                  |
+| `purchase_data`  | `string`  | `Purchase.getOriginalJson()` from the Billing Library. |
+| `data_signature` | `string`  | `Purchase.getSignature()` from the Billing Library.    |
+
 
 ```lua
 tenjin.transaction(
@@ -296,20 +299,21 @@ tenjin.transaction(
 
 Send an Amazon App Store purchase for validation.
 
-| Param | Type | Notes |
-| --- | --- | --- |
-| `product_id`    | `string` | SKU. |
-| `currency_code` | `string` | ISO-4217 code (Amazon receipts don't carry this). |
-| `quantity`      | `integer` | Items bought. |
-| `unit_price`    | `number` | Price per unit. |
-| `receipt_id`    | `string` | `Receipt.getReceiptId()`. |
-| `user_id`       | `string` | `UserData.getUserId()`. |
-| `receipt`       | `string` | The full receipt JSON. |
+
+| Param           | Type      | Notes                                             |
+| --------------- | --------- | ------------------------------------------------- |
+| `product_id`    | `string`  | SKU.                                              |
+| `currency_code` | `string`  | ISO-4217 code (Amazon receipts don't carry this). |
+| `quantity`      | `integer` | Items bought.                                     |
+| `unit_price`    | `number`  | Price per unit.                                   |
+| `receipt_id`    | `string`  | `Receipt.getReceiptId()`.                         |
+| `user_id`       | `string`  | `UserData.getUserId()`.                           |
+| `receipt`       | `string`  | The full receipt JSON.                            |
+
 
 ### GDPR opt-in / opt-out
 
-By default Tenjin is opted in. Use these functions to respect a user's
-consent preferences. `opt_out` stops all requests to Tenjin's backend.
+By default Tenjin is opted in. Use these functions to respect a user's consent preferences. `opt_out` stops all requests to Tenjin's backend.
 
 #### `tenjin.opt_in()` / `tenjin.opt_out()`
 
@@ -325,12 +329,13 @@ end
 
 #### `tenjin.opt_in_params(params)`
 
-Send **only** the device-related parameters listed in `params`; drop
-everything else. `advertising_id` is always required by Tenjin.
+Send **only** the device-related parameters listed in `params`; drop everything else. `advertising_id` is always required by Tenjin.
 
-| Param | Type | Notes |
-| --- | --- | --- |
+
+| Param    | Type              | Notes                                      |
+| -------- | ----------------- | ------------------------------------------ |
 | `params` | `table of string` | Subset of Tenjin's device-parameter names. |
+
 
 ```lua
 tenjin.opt_in_params({ "ip_address", "advertising_id", "limit_ad_tracking", "referrer" })
@@ -355,16 +360,16 @@ local opted_in = tenjin.opt_in_out_using_cmp()
 
 ### Google DMA parameters
 
-If you already have a CMP integrated, Tenjin picks DMA consent up
-automatically. Use these functions only if you want to override the CMP
-or roll your own consent flow.
+If you already have a CMP integrated, Tenjin picks DMA consent up automatically. Use these functions only if you want to override  the CMP or roll your own consent flow.
 
 #### `tenjin.set_google_dma_parameters(ad_personalization, ad_user_data)`
 
-| Param | Type | Notes |
-| --- | --- | --- |
+
+| Param                | Type      | Notes                                |
+| -------------------- | --------- | ------------------------------------ |
 | `ad_personalization` | `boolean` | User consents to ad personalization. |
-| `ad_user_data`       | `boolean` | User consents to ad user data. |
+| `ad_user_data`       | `boolean` | User consents to ad user data.       |
+
 
 ```lua
 tenjin.set_google_dma_parameters(true, true)
@@ -412,9 +417,11 @@ Append a numeric subversion to your app version for A/B reporting in
 Tenjin DataVault. If your app version is `1.0.1` and `n = 8888`, Tenjin
 reports the version as `1.0.1.8888`.
 
-| Param | Type |
-| --- | --- |
-| `n` | `integer` |
+
+| Param | Type      |
+| ----- | --------- |
+| `n`   | `integer` |
+
 
 ```lua
 tenjin.append_app_subversion(8888)
@@ -433,32 +440,35 @@ tenjin.set_cache_event_setting(true)
 
 ### User profile (LiveOps metrics)
 
-The Tenjin SDK automatically tracks session counts, session duration,
-IAP totals and ILRD ad revenue per user and persists them on the device.
+The Tenjin SDK automatically tracks session counts, session duration, IAP totals and ILRD ad revenue per user and persists them on the device.
 
 #### `tenjin.get_user_profile()`
 
 Return the full user profile as a Lua table. Always-present keys:
 
-| Key | Type | Description |
-| --- | --- | --- |
-| `session_count`          | `integer` | Total sessions. |
-| `total_session_time`     | `integer` | Total session time (milliseconds). |
-| `average_session_length` | `integer` | Average session (milliseconds). |
+
+| Key                      | Type      | Description                            |
+| ------------------------ | --------- | -------------------------------------- |
+| `session_count`          | `integer` | Total sessions.                        |
+| `total_session_time`     | `integer` | Total session time (milliseconds).     |
+| `average_session_length` | `integer` | Average session (milliseconds).        |
 | `last_session_length`    | `integer` | Last completed session (milliseconds). |
-| `iap_transaction_count`  | `integer` | Total IAP count. |
-| `total_ilrd_revenue_usd` | `number`  | Total ad revenue in USD. |
+| `iap_transaction_count`  | `integer` | Total IAP count.                       |
+| `total_ilrd_revenue_usd` | `number`  | Total ad revenue in USD.               |
+
 
 Conditionally present (only when available):
 
-| Key | Type | Description |
-| --- | --- | --- |
-| `first_session_date`      | `string` | ISO-8601 timestamp. |
-| `last_session_date`       | `string` | ISO-8601 timestamp. |
-| `current_session_length`  | `integer` | Active session duration (ms). |
-| `iap_revenue_by_currency` | `table`  | `currency_code -> number` map. |
-| `purchased_product_ids`   | `table`  | Sorted list of product ids. |
-| `ilrd_revenue_by_network` | `table`  | `network_name -> number` map. |
+
+| Key                       | Type      | Description                    |
+| ------------------------- | --------- | ------------------------------ |
+| `first_session_date`      | `string`  | ISO-8601 timestamp.            |
+| `last_session_date`       | `string`  | ISO-8601 timestamp.            |
+| `current_session_length`  | `integer` | Active session duration (ms).  |
+| `iap_revenue_by_currency` | `table`   | `currency_code -> number` map. |
+| `purchased_product_ids`   | `table`   | Sorted list of product ids.    |
+| `ilrd_revenue_by_network` | `table`   | `network_name -> number` map.  |
+
 
 ```lua
 local profile = tenjin.get_user_profile()
@@ -495,10 +505,12 @@ for the exact fields your network requires.
 tenjin.event_ad_impression(network, json_string)
 ```
 
-| Param         | Type     | Notes |
-| ---           | ---      | --- |
-| `network`     | `string` | One of `tenjin.AD_NETWORK_*` constants. |
+
+| Param         | Type     | Notes                                                          |
+| ------------- | -------- | -------------------------------------------------------------- |
+| `network`     | `string` | One of `tenjin.AD_NETWORK_*` constants.                        |
 | `json_string` | `string` | JSON-encoded impression payload. Optional; defaults to `"{}"`. |
+
 
 #### Per-network convenience wrappers
 
@@ -558,10 +570,12 @@ tenjin.AD_NETWORK_TRADPLUS    -- "TradPlus"
 
 ## Platform behaviour
 
-| Platform | Behaviour |
-| --- | --- |
-| Android | Full implementation, all functions forward to `TenjinSDK`. |
+
+| Platform                          | Behaviour                                                                                                                                                    |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Android                           | Full implementation, all functions forward to `TenjinSDK`.                                                                                                   |
 | iOS, macOS, Windows, Linux, HTML5 | All functions are registered, every call logs a single `tenjin.<name> is only supported on Android; ignored` warning and does nothing. Getters return `nil`. |
+
 
 This lets you share the same game scripts across Android and desktop /
 editor builds without extra guards.
@@ -570,12 +584,11 @@ editor builds without extra guards.
 
 ## Testing
 
-1. Open [Tenjin dashboard → Support → Test Devices](https://www.tenjin.com/dashboard)
-   and add your test device's `advertising_id` (GAID).
+1. Open [Tenjin dashboard → Support → Test Devices](https://www.tenjin.com/dashboard) and add your test device's `advertising_id` (GAID).
 2. Open **SDK Live** in the dashboard.
 3. Run your game on the device and trigger an event.
 4. You should see events appear in the SDK Live log within a few
-   seconds.
+  seconds.
 
 For local debugging, filter `adb logcat` by the `TenjinJNI` tag:
 
@@ -583,42 +596,31 @@ For local debugging, filter `adb logcat` by the `TenjinJNI` tag:
 adb logcat -s TenjinJNI:V
 ```
 
-Any errors in the Java helper (network failures, misconfigured SDK key,
-reflection errors for an unavailable ILRD network) are logged there.
+Any errors in the Java helper (network failures, misconfigured SDK key, reflection errors for an unavailable ILRD network) are logged there.
 
 ---
 
 ## Troubleshooting
 
-**`tenjin.<name> is only supported on Android; ignored`**
+`**tenjin.<name> is only supported on Android; ignored**`
 
-You are running on a non-Android platform. Expected in the Defold editor
-and on iOS / desktop builds.
+You are running on a non-Android platform. Expected in the Defold editor and on iOS / desktop builds.
 
-**`TenjinJNI.init failed`**
+`**TenjinJNI.init failed**`
 
 Typical causes:
+
 - SDK key is empty or wrong.
-- Google Play Services not available on the test device / emulator.
-  Tenjin falls back to limited tracking, but full attribution requires
-  Play Services.
+- Google Play Services not available on the test device / emulator. Tenjin falls back to limited tracking, but full attribution requires Play Services.
 
-**`eventAdImpression: method for network '<X>' not found`**
+`**eventAdImpression: method for network '<X>' not found**`
 
-Either the network name is misspelled (the names are case-sensitive and
-must match Tenjin's Java method suffix: `AdMob`, `AppLovin`,
-`IronSource`, `HyperBid`, `TopOn`, `CAS`, `TradPlus`) **or** your bundled
-`com.tenjin:android-sdk` version is older than the one that introduced
-the method. Update the Gradle version in
-[`tenjin/manifests/android/build.gradle`](tenjin/manifests/android/build.gradle)
-if you fork this extension.
+Either the network name is misspelled (the names are case-sensitive and must match Tenjin's Java method suffix: `AdMob`, `AppLovin`, `IronSource`, `HyperBid`, `TopOn`, `CAS`, `TradPlus`) **or** your bundled `com.tenjin:android-sdk` version is older than the one that introduced the method. Update the Gradle version in `[tenjin/manifests/android/build.gradle](tenjin/manifests/android/build.gradle)` if you fork this extension.
 
 **Events not appearing in the dashboard**
 
-- Make sure `tenjin.connect()` runs on every resume. It does
-  automatically when `tenjin.set_auto_connect(true)` (default).
-- Confirm that your test device's GAID is listed in *Test Devices* in
-  the dashboard.
+- Make sure `tenjin.connect()` runs on every resume. It does automatically when `tenjin.set_auto_connect(true)` (default).
+- Confirm that your test device's GAID is listed in *Test Devices* in the dashboard.
 - Check `adb logcat -s TenjinJNI:V` for Java-side errors.
 
 ---
@@ -626,17 +628,14 @@ if you fork this extension.
 ## Out of scope
 
 - iOS and other platforms (no-op stubs only for now — PRs welcome).
-- OAID libraries (MSA / Huawei). ProGuard rules are preserved so you can
-  add them via a separate extension if you ship on non-Google Android
-  stores.
+- OAID libraries (MSA / Huawei). ProGuard rules are preserved so you can add them via a separate extension if you ship on non-Google Android stores.
 - Deferred deep-link callback handling.
 
 ---
 
 ## Credits
 
-- [Defold extension manual](https://defold.com/manuals/extensions/) and
-  [Defold Lua API reference](https://defold.com/ref/overview_defoldlua/).
+- [Defold extension manual](https://defold.com/manuals/extensions/) and [Defold Lua API reference](https://defold.com/ref/overview_defoldlua/).
 - [Tenjin Android SDK](https://github.com/tenjin/tenjin-android-sdk).
-- [Defold Firebase Analytics extension](https://github.com/defold/extension-firebase-analytics)
-  for the Java / JNI bridge pattern this extension follows.
+- [Defold Firebase Analytics extension](https://github.com/defold/extension-firebase-analytics) for the Java / JNI bridge pattern this extension follows.
+

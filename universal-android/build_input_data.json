@@ -1,0 +1,17 @@
+{
+  "project_git" : {
+    "sha1" : "2bb9c34b932017c3a672d129e389167e22f23a9d",
+    "origin" : "https://github.com/seliseev/defold-tenjin.git",
+    "branch" : "main"
+  },
+  "bob_arguments" : {
+    "sha1" : "0ad9c86fa0a9f7ac19bc468b1a67ee06bb2578b5",
+    "version" : "1.12.3",
+    "timestamp" : "2026-04-09 14:26:02"
+  },
+  "defold_sdk" : "0ad9c86fa0a9f7ac19bc468b1a67ee06bb2578b5",
+  "dependencies" : [ {
+    "link" : "https://github.com/defold/extension-adinfo/archive/refs/tags/3.0.2.zip",
+    "md5" : "8EB45DB0F343ADAA3F90BB84731C0990"
+  } ]
+}

@@ -4,12 +4,13 @@
 local TENJIN_SDK_KEY = "VC6OND6YYCKGTB9FTLJCFPICCWBWZ6XB"
 
 function init(self)
+	adinfo.get(function(self, info)
+		print(info.ad_ident, info.ad_tracking_enabled)
+	end)
+	
 	tenjin.init(TENJIN_SDK_KEY)
 	tenjin.set_app_store(tenjin.APP_STORE_GOOGLEPLAY)
 	tenjin.connect()
-
-	tenjin.send_event("game_started")
-	tenjin.send_event_with_value("coins_earned", 100)
 
 	local installation_id = tenjin.get_analytics_installation_id()
 	print("tenjin installation id:", installation_id)
