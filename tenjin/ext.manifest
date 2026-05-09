@@ -3,4 +3,4 @@ name: "TenjinExt"
 platforms:
     android:
         context:
-            jetifier: "true"
+            jetifier: true

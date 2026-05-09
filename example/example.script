@@ -1,7 +1,7 @@
 -- Example showing how to integrate the Tenjin extension.
 -- Replace the placeholder with your SDK key from https://tenjin.com
 
-local TENJIN_SDK_KEY = "VC6OND6YYCKGTB9FTLJCFPICCWBWZ6XB"
+local TENJIN_SDK_KEY = "Past Your SDK Key Here"
 
 function init(self)
 	adinfo.get(function(self, info)

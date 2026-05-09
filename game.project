@@ -18,5 +18,5 @@ include_dirs = tenjin
 [android]
 minimum_sdk_version = 23
 debuggable = 1
-package = com.fun.worldcode
+package = com.tenjin.example
 
