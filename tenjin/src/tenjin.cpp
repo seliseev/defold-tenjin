@@ -395,6 +395,9 @@ TENJIN_ILRD_WRAPPER(EventAdImpressionHyperBid,  "HyperBid")
 TENJIN_ILRD_WRAPPER(EventAdImpressionTopOn,     "TopOn")
 TENJIN_ILRD_WRAPPER(EventAdImpressionCAS,       "CAS")
 TENJIN_ILRD_WRAPPER(EventAdImpressionTradPlus,  "TradPlus")
+TENJIN_ILRD_WRAPPER(EventAdImpressionAdMobNextGen, "AdMobNextGen")
+TENJIN_ILRD_WRAPPER(EventAdImpressionCloudX,    "CloudX")
+TENJIN_ILRD_WRAPPER(EventAdImpressionCustom,    "Custom")
 
 #undef TENJIN_ILRD_WRAPPER
 
@@ -443,6 +446,9 @@ static const luaL_reg Module_methods[] =
     {"event_ad_impression_topon",    Tenjin_EventAdImpressionTopOn},
     {"event_ad_impression_cas",      Tenjin_EventAdImpressionCAS},
     {"event_ad_impression_tradplus", Tenjin_EventAdImpressionTradPlus},
+    {"event_ad_impression_admob_next_gen", Tenjin_EventAdImpressionAdMobNextGen},
+    {"event_ad_impression_cloudx",   Tenjin_EventAdImpressionCloudX},
+    {"event_ad_impression_custom",   Tenjin_EventAdImpressionCustom},
 
     {0, 0}
 };
@@ -470,6 +476,9 @@ static void LuaInit(lua_State* L)
     SET_STRING_CONST("AD_NETWORK_TOPON",      "TopOn")
     SET_STRING_CONST("AD_NETWORK_CAS",        "CAS")
     SET_STRING_CONST("AD_NETWORK_TRADPLUS",   "TradPlus")
+    SET_STRING_CONST("AD_NETWORK_ADMOB_NEXT_GEN", "AdMobNextGen")
+    SET_STRING_CONST("AD_NETWORK_CLOUDX",     "CloudX")
+    SET_STRING_CONST("AD_NETWORK_CUSTOM",     "Custom")
 
     #undef SET_STRING_CONST
 

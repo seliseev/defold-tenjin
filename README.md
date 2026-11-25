@@ -490,7 +490,8 @@ tenjin.reset_user_profile()
 ### Impression Level Ad Revenue (ILRD)
 
 If you use a mediation SDK (AppLovin MAX, Unity LevelPlay / IronSource,
-Google AdMob, TopOn, CAS, TradPlus, HyperBid) you can forward every
+Google AdMob (incl. Next Gen SDK), TopOn, CAS, TradPlus, HyperBid, CloudX,
+or your own custom mediation) you can forward every
 impression's revenue to Tenjin. The extension does **not** pull mediation
 SDKs in as dependencies — you must integrate them in your own project
 and pass the impression payload as a JSON string.
@@ -522,6 +523,9 @@ tenjin.event_ad_impression_hyperbid(json_string)
 tenjin.event_ad_impression_topon(json_string)
 tenjin.event_ad_impression_cas(json_string)
 tenjin.event_ad_impression_tradplus(json_string)
+tenjin.event_ad_impression_admob_next_gen(json_string)
+tenjin.event_ad_impression_cloudx(json_string)
+tenjin.event_ad_impression_custom(json_string)    -- custom / in-house mediation
 ```
 
 Example (AdMob):
@@ -564,6 +568,9 @@ tenjin.AD_NETWORK_HYPERBID    -- "HyperBid"
 tenjin.AD_NETWORK_TOPON       -- "TopOn"
 tenjin.AD_NETWORK_CAS         -- "CAS"
 tenjin.AD_NETWORK_TRADPLUS    -- "TradPlus"
+tenjin.AD_NETWORK_ADMOB_NEXT_GEN -- "AdMobNextGen"
+tenjin.AD_NETWORK_CLOUDX      -- "CloudX"
+tenjin.AD_NETWORK_CUSTOM      -- "Custom"
 ```
 
 ---
@@ -615,7 +622,7 @@ Typical causes:
 
 `**eventAdImpression: method for network '<X>' not found**`
 
-Either the network name is misspelled (the names are case-sensitive and must match Tenjin's Java method suffix: `AdMob`, `AppLovin`, `IronSource`, `HyperBid`, `TopOn`, `CAS`, `TradPlus`) **or** your bundled `com.tenjin:android-sdk` version is older than the one that introduced the method. Update the Gradle version in `[tenjin/manifests/android/build.gradle](tenjin/manifests/android/build.gradle)` if you fork this extension.
+Either the network name is misspelled (the names are case-sensitive and must match Tenjin's Java method suffix: `AdMob`, `AppLovin`, `IronSource`, `HyperBid`, `TopOn`, `CAS`, `TradPlus`, `AdMobNextGen`, `CloudX`, `Custom`) **or** your bundled `com.tenjin:android-sdk` version is older than the one that introduced the method. Update the Gradle version in `[tenjin/manifests/android/build.gradle](tenjin/manifests/android/build.gradle)` if you fork this extension.
 
 **Events not appearing in the dashboard**
 

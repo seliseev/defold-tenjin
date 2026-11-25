@@ -275,7 +275,8 @@ public class TenjinJNI {
      * on the mediation SDKs.
      *
      * @param network one of: "AdMob", "AppLovin", "IronSource", "HyperBid",
-     *                "TopOn", "CAS", "TradPlus"
+     *                "TopOn", "CAS", "TradPlus",
+     *                "AdMobNextGen", "CloudX", "Custom"
      * @param json    the impression data as a JSON-encoded string
      */
     public static void eventAdImpression(String network, String json) {
